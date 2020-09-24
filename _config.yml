@@ -3,8 +3,7 @@ plugins:
 relative_links:
   enabled: true
   collections: true
-include:
-  - README.md
+
 
 theme: jekyll-theme-hacker
 title: [Software Engineering 2 - Journal]

@@ -4,6 +4,8 @@ relative_links:
   enabled: true
   collections: true
 
+github:
+ repository_url: https://github.com/JesseETI/soft-eng-2-project
 
 theme: jekyll-theme-hacker
 title: [Software Engineering 2 - Journal]

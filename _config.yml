@@ -7,3 +7,5 @@ include:
   - README.md
 
 theme: jekyll-theme-hacker
+title: [Software Engineering 2 - Journal]
+description: [This is my journal for COMP-3613: Software Engineering II semester long Group project]

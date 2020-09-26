@@ -4,47 +4,65 @@ import os
 from datetime import datetime
 
 
-class FileManager:
+class MdFileManager:
     TEMPLATE_FOLDER = "../Template/"
     DAILY_ENTRIES_FOLDER = "./"
 
-    def getMdFilesFromFolder(self, folder=DAILY_ENTRIES_FOLDER):
-        mdFiles = []
-        mdFiles = self.getMdFilenamesFromFolder(folder)
+    def __init__(self, folder=DAILY_ENTRIES_FOLDER):
+        self.folder = folder
+        self.mdFileNamesFromFolder = self.getMdFilenamesFromFolder()
+        self.mdFileLocations = self.getMdFilesLocationFromFolder()
 
-        return [folder + x + ".md" for x in mdFiles]
+    def getMdFilesLocationFromFolder(self):
+        return [self.folder + x + ".md" for x in self.mdFileNamesFromFolder]
 
-    def getMdFilenamesFromFolder(self, folder=DAILY_ENTRIES_FOLDER):
-        return [x.replace(".md", "") for x in os.listdir(folder) if x.endswith(".md")]
+    def getMdFilenamesFromFolder(self):
+        return [
+            x.replace(".md", "") for x in os.listdir(self.folder) if x.endswith(".md")
+        ]
+
+    def getFileFromLocationWithTitle(self, title):
+        if title in self.mdFileNamesFromFolder:
+            return self.mdFileLocations[self.mdFileNamesFromFolder.index(title)]
+        return None
 
 
 class DiaryDate:
-    DATE_STRING_FORMAT = "%A %d %B, %Y"
+    DATE_STRING_FORMAT_LONG = "%A %d %B, %Y"
     DATE_STRING_FORMAT_FOR_OUTPUT_FILE = "%d%m%Y"
     date = None
+    filename = ""
 
-    def __init__(self, date=None):
-        if date is not None:
-            self.date = datetime.strptime(date, self.DATE_STRING_FORMAT_FOR_OUTPUT_FILE)
-        else:
-            self.date = datetime.now()
+    def __init__(self, date):
+        self.date = date
 
     def getDateFormatForOutputfile(self):
         return self.date.strftime(self.DATE_STRING_FORMAT_FOR_OUTPUT_FILE)
 
     def getLongDateFormat(self):
-        return self.date.strftime(self.DATE_STRING_FORMAT)
+        return self.date.strftime(self.DATE_STRING_FORMAT_LONG)
 
     # @staticmethod
     # def createDateObj():
     #     return datetime.now()
 
 
-class DiaryEntry:
+class DiaryFile(DiaryDate):
+    def __init__(self, date):
+        if type(date) != datetime:
+            date = datetime.strptime(date, super().DATE_STRING_FORMAT_FOR_OUTPUT_FILE)
+
+        super().__init__(date)
+
+        self.filename = self.getDateFormatForOutputfile()
+
+
+class DiaryEntry(DiaryFile):
     variableList = {}
 
-    def __init__(self, dateObj):
-        self.variableList["DiaryDate"] = dateObj.getLongDateFormat()
+    def __init__(self, date=datetime.now()):
+        super().__init__(date)
+        self.variableList["DiaryDate"] = self.getLongDateFormat()
 
     def getVariableList(self):
         return self.variableList
@@ -74,16 +92,15 @@ def createNewDataFromTemplate(variableList, templateFile, filename):
 
 
 if __name__ == "__main__":
-    dateObj = DiaryDate()
-    entry = DiaryEntry(dateObj)
-    variableList = entry.getVariableList()
-    fileManager = FileManager()
+    diaryEntry = DiaryEntry("25021999")
+    print(diaryEntry.variableList)
 
-    filename = dateObj.getDateFormatForOutputfile()
-    templateFile = fileManager.getMdFilesFromFolder(fileManager.TEMPLATE_FOLDER)[0]
-    filesInDateEntry = fileManager.getMdFilenamesFromFolder()
+    # fileManager = FileManager()
 
-    if filename not in filesInDateEntry:
-        createNewDataFromTemplate(
-            variableList, templateFile, fileManager.DAILY_ENTRIES_FOLDER + filename
-        )
+    # templateFile = fileManager.getMdFilesFromFolder(fileManager.TEMPLATE_FOLDER)[0]
+    # filesInDateEntry = fileManager.getMdFilenamesFromFolder()
+
+    # if filename not in filesInDateEntry:
+    #     createNewDataFromTemplate(
+    #         variableList, templateFile, fileManager.DAILY_ENTRIES_FOLDER + filename
+    #     )

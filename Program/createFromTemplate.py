@@ -7,11 +7,22 @@ from datetime import datetime
 class MdFileManager:
     TEMPLATE_FOLDER = "../Template/"
     DAILY_ENTRIES_FOLDER = "./"
+    diaryEntry = None
+    templateFile = ""
+    lines = []
 
-    def __init__(self, folder=DAILY_ENTRIES_FOLDER):
+    def __init__(
+        self,
+        folder=TEMPLATE_FOLDER,
+        date=datetime.now(),
+        templateFileName="JournalTemplate1",
+    ):
         self.folder = folder
         self.mdFileNamesFromFolder = self.getMdFilenamesFromFolder()
         self.mdFileLocations = self.getMdFilesLocationFromFolder()
+        self.diaryEntry = DiaryEntry(date)
+        self.templateFile = self.getFileLocationWithTitle(templateFileName)
+        self.lines = self.getLinesFromFile()
 
     def getMdFilesLocationFromFolder(self):
         return [self.folder + x + ".md" for x in self.mdFileNamesFromFolder]
@@ -21,10 +32,33 @@ class MdFileManager:
             x.replace(".md", "") for x in os.listdir(self.folder) if x.endswith(".md")
         ]
 
-    def getFileFromLocationWithTitle(self, title):
+    def getFileLocationWithTitle(self, title):
         if title in self.mdFileNamesFromFolder:
             return self.mdFileLocations[self.mdFileNamesFromFolder.index(title)]
         return None
+
+    # file manipulation
+    def getLinesFromFile(self):
+        with open(self.templateFile, "r") as fs:
+            return fs.readlines()
+
+    def updateVariablesInLines(self):
+        for var in self.diaryEntry.variableList:
+            for x, line in enumerate(self.lines):
+                if "<{}>".format(var) in line:
+                    self.lines[x] = line.replace(
+                        "<{}>".format(var), self.diaryEntry.variableList[var]
+                    )
+
+    def createNewDateEntryInLocation(self):
+        with open(
+            self.DAILY_ENTRIES_FOLDER + self.diaryEntry.filename + ".md", "w"
+        ) as fs:
+            fs.writelines(self.lines)
+
+    def createNewDataFromTemplate(self):
+        self.updateVariablesInLines()
+        self.createNewDateEntryInLocation()
 
 
 class DiaryDate:
@@ -53,14 +87,13 @@ class DiaryFile(DiaryDate):
             date = datetime.strptime(date, super().DATE_STRING_FORMAT_FOR_OUTPUT_FILE)
 
         super().__init__(date)
-
         self.filename = self.getDateFormatForOutputfile()
 
 
 class DiaryEntry(DiaryFile):
     variableList = {}
 
-    def __init__(self, date=datetime.now()):
+    def __init__(self, date):
         super().__init__(date)
         self.variableList["DiaryDate"] = self.getLongDateFormat()
 
@@ -68,39 +101,6 @@ class DiaryEntry(DiaryFile):
         return self.variableList
 
 
-def getLinesFromFile(file):
-    with open(file, "r") as fs:
-        return fs.readlines()
-
-
-def updateVariablesInLineslines(variableList, lines):
-    for var in variableList:
-        for x, line in enumerate(lines):
-            if "<{}>".format(var) in line:
-                lines[x] = line.replace("<{}>".format(var), variableList[var])
-
-
-def createNewDateEntryInLocation(filename, lines):
-    with open(filename + ".md", "w") as fs:
-        fs.writelines(lines)
-
-
-def createNewDataFromTemplate(variableList, templateFile, filename):
-    lines = getLinesFromFile(templateFile)
-    updateVariablesInLineslines(variableList, lines)
-    createNewDateEntryInLocation(filename, lines)
-
-
 if __name__ == "__main__":
-    diaryEntry = DiaryEntry("25021999")
-    print(diaryEntry.variableList)
-
-    # fileManager = FileManager()
-
-    # templateFile = fileManager.getMdFilesFromFolder(fileManager.TEMPLATE_FOLDER)[0]
-    # filesInDateEntry = fileManager.getMdFilenamesFromFolder()
-
-    # if filename not in filesInDateEntry:
-    #     createNewDataFromTemplate(
-    #         variableList, templateFile, fileManager.DAILY_ENTRIES_FOLDER + filename
-    #     )
+    file = MdFileManager()
+    file.createNewDataFromTemplate()

@@ -96,5 +96,12 @@ class MdFileManager:
 
 
 if __name__ == "__main__":
-    file = MdFileManager(variableList={"HoursWorked": "7"})
+    file = None
+    date, hour = input("Enter date and hours (ddmmyyy h):  ").split()
+    if not hour.isnumeric():
+        hour = "3"
+    if date.isnumeric():
+        file = MdFileManager(date, variableList={"HoursWorked": hour})
+    else:
+        file = MdFileManager(variableList={"HoursWorked": hour})
     file.createNewDataFromTemplate()

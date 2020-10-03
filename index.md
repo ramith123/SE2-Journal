@@ -6,4 +6,4 @@
 
 ## October
 
-[Day 2](Daily_Entries/02102020.md)
+[Day 1](Daily_Entries/02102020.md)

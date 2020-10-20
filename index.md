@@ -2,10 +2,10 @@
 
 ## September
 
-[Day 1](Daily_Entries/24092020.md)
+[24th](Daily_Entries/24092020.md)
 
 ## October
 
-[Day 1](Daily_Entries/02102020.md)
+[2nd](Daily_Entries/02102020.md)
 
-[Day 2](Daily_Entries/19102020.md)
+[8th to 19th](Daily_Entries/19102020.md)

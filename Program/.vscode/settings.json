@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "F:\\onedrives\\OneDrive - The University of the West Indies, St. Augustine\\YEAR 3 SEM 1\\COMP3613 - Software Engineering\\diary\\Program\\.venv\\Scripts\\python.exe"
+    "python.pythonPath": "F:\\onedrives\\OneDrive - The University of the West Indies, St. Augustine\\YEAR 3 SEM 1\\COMP3613 - Software Engineering\\diary\\Program\\.venv\\Scripts\\python.exe",
+    "cSpell.ignoreWords": [
+        "treelo"
+    ],
+    "cSpell.words": [
+        "Trello"
+    ]
 }

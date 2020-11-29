@@ -17,3 +17,5 @@
 ## November
 
 [1st](Daily_Entries/01112020.md)
+
+[3rd to 8th](Daily_Entries/02112020.md)

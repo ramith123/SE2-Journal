@@ -20,4 +20,6 @@
 
 [3rd to 8th](Daily_Entries/02112020.md)
 
-[9th to 8th](Daily_Entries/09112020.md)
+[9th to 16th](Daily_Entries/09112020.md)
+
+[17th to 24th](Daily_Entries/17112020.md)
